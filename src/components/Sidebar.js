@@ -17,9 +17,22 @@ import {
 import { useLocation } from "react-router";
 import NavItem from "./NavItem";
 
-export default function Sidebar() {
-  const [navSize, setNavSize] = useState("small");
-  const [theme, setTheme] = useState("dark");
+export default function Sidebar({ theme, setTheme }) {
+  const getNavSize = () => {
+    let _navSize = localStorage.getItem("navSize");
+    if (!_navSize || (_navSize !== "small" && _navSize !== "large")) {
+      _navSize = "small";
+      localStorage.setItem("navSize", _navSize);
+    }
+
+    return _navSize;
+  };
+
+  const [navSize, setNavSize] = useState(getNavSize());
+  const _setNavSize = (_navSize) => {
+    setNavSize(_navSize);
+    localStorage.setItem("navSize", _navSize);
+  };
   let location = useLocation();
 
   return (
@@ -54,17 +67,23 @@ export default function Sidebar() {
             _active={{ backgroundColor: "#333333" }}
             icon={<FiMenu />}
             onClick={() => {
-              navSize === "small" ? setNavSize("large") : setNavSize("small");
+              navSize === "small" ? _setNavSize("large") : _setNavSize("small");
             }}
             paddingLeft={navSize === "large" && "0.75rem"}
             borderLeft="2px solid #333333"
             borderRight="2px solid #333333"
           ></IconButton>
-          <Icon
+          <IconButton
+            background="none"
+            _hover={{ background: "none", color: "#FFFFFF" }}
+            _focus={{ boxShadow: "none" }}
+            _active={{ backgroundColor: "#333333" }}
             hidden={navSize === "small"}
-            as={theme === "light" ? FiMoon : FiSun}
             fontSize="2xl"
-            color="#FFFFFF"
+            icon={theme === "light" ? <FiMoon /> : <FiSun />}
+            onClick={() => {
+              theme === "light" ? setTheme("dark") : setTheme("light");
+            }}
           />
         </Flex>
         <NavItem
@@ -120,9 +139,17 @@ export default function Sidebar() {
         color="#FFFFFF"
       >
         <Icon
+          background="none"
+          color="#858585"
+          _hover={{ background: "none", color: "#FFFFFF", cursor: "pointer" }}
+          _focus={{ boxShadow: "none" }}
+          _active={{ backgroundColor: "#333333" }}
           hidden={navSize !== "small"}
           as={theme === "light" ? FiMoon : FiSun}
           fontSize="2xl"
+          onClick={() => {
+            theme === "light" ? setTheme("dark") : setTheme("light");
+          }}
         />
         <Divider display={navSize === "small" ? "none" : "flex"} />
         <Flex mt={4} alignItems="center" justifyContent="left">
