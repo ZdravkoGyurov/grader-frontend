@@ -1,23 +1,13 @@
 import "./App.css";
-import { Route, Routes, Link } from "react-router-dom";
-import { Flex, Link as ChakraLink } from "@chakra-ui/layout";
-import About from "./About";
+import { Flex } from "@chakra-ui/layout";
 import Sidebar from "./components/Sidebar";
+import Main from "./components/Main";
 
 function App() {
   return (
-    <Flex>
+    <Flex backgroundColor="#F3F3F3" h="100vh" p="1rem">
       <Sidebar />
-      {/* <ul>
-        <li>
-          <Link to={"/about"}>
-            <ChakraLink color={"red"}>About</ChakraLink>
-          </Link>
-        </li>
-      </ul> */}
-      <Routes>
-        <Route exact path="/about" element={<About />} />
-      </Routes>
+      <Main />
     </Flex>
   );
 }
