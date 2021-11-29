@@ -2,8 +2,10 @@ import "./App.css";
 import { Flex } from "@chakra-ui/layout";
 import Sidebar from "./components/Sidebar";
 import Main from "./components/Main";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import themeStyles from "./theme";
+import Home from "./components/Home";
+import auth from "./api/auth";
 
 function App() {
   const getTheme = () => {
@@ -22,10 +24,27 @@ function App() {
     localStorage.setItem("theme", _theme);
   };
 
+  const [userInfo, setUserInfo] = useState(null);
+  const [fetchingUserInfo, setFetchingUserInfo] = useState(true);
+  useEffect(() => {
+    auth.getUserInfo(setUserInfo, setFetchingUserInfo);
+  }, []);
+
+  if (fetchingUserInfo) {
+    // add loading page
+    return <div>loading...</div>;
+  }
+
   return (
     <Flex backgroundColor="#F3F3F3" h="100vh" p="1rem">
-      <Sidebar theme={theme} setTheme={_setTheme} />
-      <Main styles={themeStyles(theme)} />
+      {userInfo ? (
+        <>
+          <Sidebar theme={theme} setTheme={_setTheme} />
+          <Main userInfo={userInfo} styles={themeStyles(theme)} />
+        </>
+      ) : (
+        <Home userInfo={userInfo}></Home>
+      )}
     </Flex>
   );
 }

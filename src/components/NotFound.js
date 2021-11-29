@@ -5,7 +5,7 @@ export default function NotFound() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/");
+    navigate("/courses");
   });
 
   return <></>;

@@ -1,7 +1,7 @@
 import { Avatar } from "@chakra-ui/avatar";
 import { IconButton } from "@chakra-ui/button";
 import Icon from "@chakra-ui/icon";
-import { Divider, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Badge, Divider, Flex, Heading } from "@chakra-ui/layout";
 import { useState } from "react";
 import {
   FiMenu,
@@ -162,7 +162,9 @@ export default function Sidebar({ theme, setTheme }) {
             <Heading as="h3" size="sm">
               zdravko.gyurov97@gmail.com
             </Heading>
-            <Text>Admin</Text>
+            <Badge marginTop="0.5rem" w="max-content" colorScheme="blue">
+              Admin
+            </Badge>
           </Flex>
         </Flex>
       </Flex>

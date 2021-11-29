@@ -8,16 +8,15 @@ import Courses from "./Courses";
 import Submissions from "./Submissions";
 import Assignments from "./Assignments";
 
-export default function Main({ styles }) {
+export default function Main({ userInfo, styles }) {
   return (
     <Flex
       backgroundColor={styles.backgroundColor}
       color={styles.color}
       w="100%"
-      alignItems="center"
-      justifyContent="center"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       borderRadius="15px"
+      p="1rem"
     >
       <Routes>
         <Route exact strict path="/submissions" element={<Submissions />} />
@@ -25,7 +24,7 @@ export default function Main({ styles }) {
         <Route exact strict path="/courses" element={<Courses />} />
         <Route exact strict path="/users" element={<Users />} />
         <Route exact strict path="/about" element={<About />} />
-        <Route exact strict path="/" element={<Home />} />
+        <Route exact strict path="/" element={<Home userInfo={userInfo} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Flex>
