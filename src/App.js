@@ -39,7 +39,12 @@ function App() {
     <Flex backgroundColor="#F3F3F3" h="100vh" p="1rem">
       {userInfo ? (
         <>
-          <Sidebar theme={theme} setTheme={_setTheme} />
+          <Sidebar
+            userInfo={userInfo}
+            setUserInfo={setUserInfo}
+            theme={theme}
+            setTheme={_setTheme}
+          />
           <Main userInfo={userInfo} styles={themeStyles(theme)} />
         </>
       ) : (

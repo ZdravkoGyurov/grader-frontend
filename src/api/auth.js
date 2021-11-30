@@ -20,5 +20,18 @@ function getUserInfo(setUserInfo, setFetchingUserInfo) {
     });
 }
 
-const auth = { login, getUserInfo };
+function logout(callback) {
+  axios
+    .delete("http://localhost:8080/logout", {
+      withCredentials: true,
+    })
+    .then(() => {
+      callback();
+    })
+    .catch((error) => {
+      callback(error);
+    });
+}
+
+const auth = { login, getUserInfo, logout };
 export default auth;

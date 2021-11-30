@@ -1,11 +1,17 @@
 import { Avatar } from "@chakra-ui/avatar";
-import { IconButton } from "@chakra-ui/button";
+import { Button, IconButton } from "@chakra-ui/button";
 import Icon from "@chakra-ui/icon";
 import { Badge, Divider, Flex, Heading } from "@chakra-ui/layout";
+import {
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+} from "@chakra-ui/popover";
 import { useState } from "react";
 import {
   FiMenu,
-  FiHome,
   FiInfo,
   FiUsers,
   FiBook,
@@ -13,11 +19,16 @@ import {
   FiCode,
   FiSun,
   FiMoon,
+  FiLogOut,
 } from "react-icons/fi";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import auth from "../api/auth";
+import consts from "../consts";
 import NavItem from "./NavItem";
 
-export default function Sidebar({ theme, setTheme }) {
+export default function Sidebar({ userInfo, setUserInfo, theme, setTheme }) {
+  let navigate = useNavigate();
+
   const getNavSize = () => {
     let _navSize = localStorage.getItem("navSize");
     if (!_navSize || (_navSize !== "small" && _navSize !== "large")) {
@@ -34,6 +45,18 @@ export default function Sidebar({ theme, setTheme }) {
     localStorage.setItem("navSize", _navSize);
   };
   let location = useLocation();
+
+  const handleLogout = () => {
+    auth.logout((error) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      setUserInfo(null);
+      return navigate("/");
+    });
+  };
 
   return (
     <Flex
@@ -86,13 +109,6 @@ export default function Sidebar({ theme, setTheme }) {
             }}
           />
         </Flex>
-        <NavItem
-          navSize={navSize}
-          icon={FiHome}
-          title="Home"
-          path="/"
-          location={location.pathname}
-        ></NavItem>
         <NavItem
           navSize={navSize}
           icon={FiBook}
@@ -153,17 +169,49 @@ export default function Sidebar({ theme, setTheme }) {
         />
         <Divider display={navSize === "small" ? "none" : "flex"} />
         <Flex mt={4} alignItems="center" justifyContent="left">
-          <Avatar size="sm" src="" />
+          <Popover direction="ltr">
+            <PopoverTrigger>
+              <Avatar cursor="pointer" size="sm" src={userInfo.avatarUrl} />
+            </PopoverTrigger>
+            <PopoverContent
+              border="none"
+              borderRadius="5px"
+              w="max-content"
+              _focus={{ boxShadow: "none" }}
+            >
+              <PopoverArrow bg="#858585" />
+              <PopoverBody
+                borderRadius="5px"
+                p={0}
+                backgroundColor="#333333"
+                w="max-content"
+              >
+                <Button
+                  border="1px solid #858585"
+                  backgroundColor="#333333"
+                  _hover={{ backgroundColor: "none", color: "#FFFFFF" }}
+                  _focus={{ boxShadow: "none" }}
+                  leftIcon={<FiLogOut />}
+                  variant="solid"
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                >
+                  Logout
+                </Button>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
           <Flex
             flexDir="column"
             ml={4}
             display={navSize === "small" ? "none" : "flex"}
           >
             <Heading as="h3" size="sm">
-              zdravko.gyurov97@gmail.com
+              {userInfo.email}
             </Heading>
             <Badge marginTop="0.5rem" w="max-content" colorScheme="blue">
-              Admin
+              {consts.roles[userInfo.roleId]}
             </Badge>
           </Flex>
         </Flex>
