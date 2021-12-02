@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import themeStyles from "./theme";
 import Home from "./components/Home";
 import auth from "./api/auth";
+import Header from "./components/Header";
 
 function App() {
   const getTheme = () => {
@@ -36,7 +37,7 @@ function App() {
   }
 
   return (
-    <Flex backgroundColor="#F3F3F3" h="100vh" p="1rem">
+    <Flex backgroundColor="#F3F3F3" h="100vh" p="0.5rem">
       {userInfo ? (
         <>
           <Sidebar
@@ -45,7 +46,14 @@ function App() {
             theme={theme}
             setTheme={_setTheme}
           />
-          <Main userInfo={userInfo} styles={themeStyles(theme)} />
+          <Flex w="100%" flexDir="column">
+            <Header
+              styles={themeStyles(theme)}
+              theme={theme}
+              setTheme={_setTheme}
+            />
+            <Main userInfo={userInfo} styles={themeStyles(theme)} />
+          </Flex>
         </>
       ) : (
         <Home userInfo={userInfo}></Home>

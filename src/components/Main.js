@@ -15,13 +15,19 @@ export default function Main({ userInfo, styles }) {
       color={styles.color}
       w="100%"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
-      borderRadius="15px"
+      borderRadius="8px"
       p="1rem"
+      h="100%"
     >
       <Routes>
         <Route exact strict path="/submissions" element={<Submissions />} />
         <Route exact strict path="/assignments" element={<Assignments />} />
-        <Route exact strict path="/courses" element={<Courses />} />
+        <Route
+          exact
+          strict
+          path="/courses"
+          element={<Courses styles={styles} />}
+        />
         <Route exact strict path="/users" element={<Users />} />
         <Route exact strict path="/about" element={<About />} />
         <Route exact strict path="/" element={<Home userInfo={userInfo} />} />

@@ -61,9 +61,9 @@ export default function Sidebar({ userInfo, setUserInfo, theme, setTheme }) {
   return (
     <Flex
       position="sticky"
-      marginRight="1rem"
+      marginRight="0.5rem"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
-      borderRadius="15px"
+      borderRadius="8px"
       flexDir="column"
       justifyContent="space-between"
       backgroundColor="#333333"
@@ -96,18 +96,6 @@ export default function Sidebar({ userInfo, setUserInfo, theme, setTheme }) {
             borderLeft="2px solid #333333"
             borderRight="2px solid #333333"
           ></IconButton>
-          <IconButton
-            background="none"
-            _hover={{ background: "none", color: "#FFFFFF" }}
-            _focus={{ boxShadow: "none" }}
-            _active={{ backgroundColor: "#333333" }}
-            hidden={navSize === "small"}
-            fontSize="2xl"
-            icon={theme === "light" ? <FiMoon /> : <FiSun />}
-            onClick={() => {
-              theme === "light" ? setTheme("dark") : setTheme("light");
-            }}
-          />
         </Flex>
         <NavItem
           navSize={navSize}
@@ -154,34 +142,26 @@ export default function Sidebar({ userInfo, setUserInfo, theme, setTheme }) {
         mb={4}
         color="#FFFFFF"
       >
-        <Icon
-          background="none"
-          color="#858585"
-          _hover={{ background: "none", color: "#FFFFFF", cursor: "pointer" }}
-          _focus={{ boxShadow: "none" }}
-          _active={{ backgroundColor: "#333333" }}
-          hidden={navSize !== "small"}
-          as={theme === "light" ? FiMoon : FiSun}
-          fontSize="2xl"
-          onClick={() => {
-            theme === "light" ? setTheme("dark") : setTheme("light");
-          }}
-        />
         <Divider display={navSize === "small" ? "none" : "flex"} />
         <Flex mt={4} alignItems="center" justifyContent="left">
           <Popover direction="ltr">
             <PopoverTrigger>
-              <Avatar cursor="pointer" size="sm" src={userInfo.avatarUrl} />
+              <Avatar
+                marginBottom="0.8rem"
+                cursor="pointer"
+                size="sm"
+                src={userInfo.avatarUrl}
+              />
             </PopoverTrigger>
             <PopoverContent
               border="none"
-              borderRadius="5px"
+              borderRadius="8px"
               w="max-content"
               _focus={{ boxShadow: "none" }}
             >
               <PopoverArrow bg="#858585" />
               <PopoverBody
-                borderRadius="5px"
+                borderRadius="8px"
                 p={0}
                 backgroundColor="#333333"
                 w="max-content"
