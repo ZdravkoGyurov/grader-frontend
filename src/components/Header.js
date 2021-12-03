@@ -1,13 +1,36 @@
+import { Button } from "@chakra-ui/button";
 import Icon from "@chakra-ui/icon";
 import { Flex, Text } from "@chakra-ui/layout";
-import { FiMoon, FiSun } from "react-icons/fi";
+import { useContext } from "react";
+import { FiLogOut, FiMoon, FiSun } from "react-icons/fi";
+import { useNavigate } from "react-router";
+import authApi from "../api/auth";
+import ThemeContext from "../contexts/ThemeContext";
+import UserContext from "../contexts/UserContext";
 
-export default function Header({ styles, theme, setTheme }) {
+const Header = () => {
+  const { theme, setTheme, styles } = useContext(ThemeContext);
+  const { setUser } = useContext(UserContext);
+
+  let navigate = useNavigate();
+
+  const handleLogout = () => {
+    authApi.logout((error) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      setUser(null);
+      return navigate("/");
+    });
+  };
+
   return (
     <Flex
       borderRadius="8px"
-      color={styles.color}
-      bg={styles.backgroundColor}
+      color={styles.colorPrimary}
+      bg={styles.bg}
       marginBottom="0.5rem"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       justifyContent="space-between"
@@ -15,18 +38,40 @@ export default function Header({ styles, theme, setTheme }) {
       p="1rem"
     >
       <Text fontSize="3xl">Grader</Text>
-      <Icon
-        background="none"
-        color="#858585"
-        _hover={{ background: "none", color: styles.color, cursor: "pointer" }}
-        _focus={{ boxShadow: "none" }}
-        _active={{ backgroundColor: styles.backgroundColor }}
-        as={theme === "light" ? FiMoon : FiSun}
-        fontSize="2xl"
-        onClick={() => {
-          theme === "light" ? setTheme("dark") : setTheme("light");
-        }}
-      />
+      <Flex alignItems="center">
+        <Icon
+          color={styles.colorSecondary}
+          _hover={{
+            background: "none",
+            color: styles.colorPrimary,
+            cursor: "pointer",
+          }}
+          _focus={{ boxShadow: "none" }}
+          _active={{ backgroundColor: styles.bg }}
+          as={theme === "light" ? FiMoon : FiSun}
+          fontSize="2xl"
+          onClick={() => {
+            theme === "light" ? setTheme("dark") : setTheme("light");
+          }}
+        />
+        <Button
+          marginLeft="1rem"
+          color="#FFFFFF"
+          backgroundColor={styles.accentLight}
+          _hover={{ backgroundColor: styles.accentLight }}
+          _focus={{ boxShadow: "none" }}
+          _active={{ backgroundColor: styles.accentDark }}
+          leftIcon={<FiLogOut />}
+          variant="solid"
+          onClick={() => {
+            handleLogout();
+          }}
+        >
+          Logout
+        </Button>
+      </Flex>
     </Flex>
   );
-}
+};
+
+export default Header;

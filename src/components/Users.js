@@ -1,7 +1,9 @@
-export default function Users() {
+const Users = () => {
   return (
     <>
       <div>Users</div>
     </>
   );
-}
+};
+
+export default Users;

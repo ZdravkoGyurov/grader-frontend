@@ -5,61 +5,60 @@ import Main from "./components/Main";
 import { useEffect, useState } from "react";
 import themeStyles from "./theme";
 import Home from "./components/Home";
-import auth from "./api/auth";
 import Header from "./components/Header";
+import UserContext from "./contexts/UserContext";
+import ThemeContext from "./contexts/ThemeContext";
+import authApi from "./api/auth";
 
-function App() {
-  const getTheme = () => {
-    let _theme = localStorage.getItem("theme");
-    if (!_theme || (_theme !== "light" && _theme !== "dark")) {
-      _theme = "light";
-      localStorage.setItem("theme", _theme);
-    }
+const getTheme = () => {
+  let theme = localStorage.getItem("theme");
+  if (!theme || (theme !== "light" && theme !== "dark")) {
+    theme = "light";
+    localStorage.setItem("theme", theme);
+  }
 
-    return _theme;
+  return theme;
+};
+
+const App = () => {
+  const [theme, _setTheme] = useState(getTheme());
+  const setTheme = (theme) => {
+    _setTheme(theme);
+    localStorage.setItem("theme", theme);
   };
-  const [theme, setTheme] = useState(getTheme());
 
-  const _setTheme = (_theme) => {
-    setTheme(_theme);
-    localStorage.setItem("theme", _theme);
-  };
-
-  const [userInfo, setUserInfo] = useState(null);
-  const [fetchingUserInfo, setFetchingUserInfo] = useState(true);
+  const [user, setUser] = useState(null);
+  const [fetchingUser, setFetchingUser] = useState(true);
   useEffect(() => {
-    auth.getUserInfo(setUserInfo, setFetchingUserInfo);
+    authApi.getUser(setUser, setFetchingUser);
   }, []);
 
-  if (fetchingUserInfo) {
+  if (fetchingUser) {
     // add loading page
     return <div>loading...</div>;
   }
 
   return (
-    <Flex backgroundColor="#F3F3F3" h="100vh" p="0.5rem">
-      {userInfo ? (
-        <>
-          <Sidebar
-            userInfo={userInfo}
-            setUserInfo={setUserInfo}
-            theme={theme}
-            setTheme={_setTheme}
-          />
-          <Flex w="100%" flexDir="column">
-            <Header
-              styles={themeStyles(theme)}
-              theme={theme}
-              setTheme={_setTheme}
-            />
-            <Main userInfo={userInfo} styles={themeStyles(theme)} />
-          </Flex>
-        </>
-      ) : (
-        <Home userInfo={userInfo}></Home>
-      )}
-    </Flex>
+    <UserContext.Provider value={{ user, setUser }}>
+      <ThemeContext.Provider
+        value={{ theme, setTheme, styles: themeStyles(theme) }}
+      >
+        <Flex backgroundColor="#F3F3F3" h="100vh" p="0.5rem">
+          {user ? (
+            <>
+              <Sidebar />
+              <Flex w="100%" flexDir="column">
+                <Header />
+                <Main />
+              </Flex>
+            </>
+          ) : (
+            <Home></Home>
+          )}
+        </Flex>
+      </ThemeContext.Provider>
+    </UserContext.Provider>
   );
-}
+};
 
 export default App;

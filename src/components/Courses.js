@@ -1,52 +1,68 @@
 import { IconButton } from "@chakra-ui/button";
 import Icon from "@chakra-ui/icon";
-import { Flex, Text } from "@chakra-ui/layout";
-import { useEffect, useState } from "react";
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td } from "@chakra-ui/react";
+import { Flex, Link, Text } from "@chakra-ui/layout";
+import { useContext, useEffect, useState } from "react";
+import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { FiArrowLeft, FiArrowRight, FiBook } from "react-icons/fi";
-import Course from "./Course";
+import ThemeContext from "../contexts/ThemeContext";
+import courseApi from "../api/course";
+import { useNavigate } from "react-router";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 
-export default function Courses({ styles }) {
+const Courses = () => {
+  const { styles } = useContext(ThemeContext);
+
   const pageSize = 10;
   const [courses, setCourses] = useState([]);
+  const [fetchingCourses, setFetchingCourses] = useState(false);
   const [page, setPage] = useState(1);
   const [maxPageSize, setMaxPageSize] = useState(1);
 
+  let navigate = useNavigate();
+
   useEffect(() => {
-    const fillCourses = [];
-    for (let i = 0; i < 25; i++) {
-      fillCourses.push(`course${i}`);
-    }
-    setCourses(fillCourses);
-    setMaxPageSize(Math.ceil(fillCourses.length / pageSize));
+    courseApi.getCourses(setCourses, setFetchingCourses);
+    setMaxPageSize(Math.ceil(courses.length / pageSize));
   }, []);
 
   return (
     <Flex flexDir="column" w="100%">
-      <Flex alignItems="center" marginBottom="1rem">
-        <Text fontSize="2xl">Courses</Text>
+      <Flex alignItems="center" marginBottom="1rem" fontSize="2xl">
+        <Breadcrumb separator="→">
+          <BreadcrumbItem isCurrentPage>
+            <BreadcrumbLink>Courses</BreadcrumbLink>
+          </BreadcrumbItem>
+        </Breadcrumb>
       </Flex>
       <Flex m="0 5%" overflowY="auto" flexDir="column" p="2rem">
         <Table variant="unstyled">
-          <Thead borderBottom={`2px solid ${styles.color}`}>
+          <Thead borderBottom={`2px solid ${styles.colorPrimary}`}>
             <Tr>
               <Th>
                 <Flex alignItems="center" justifyContent="space-between">
                   Name
                   <Flex alignItems="center">
                     <IconButton
+                      color="#FFFFFF"
                       disabled={page === 1}
                       icon={<FiArrowLeft />}
-                      bg={styles.backgroundColor}
+                      _focus={{ boxShadow: "none" }}
+                      _hover={{ backgroundColor: styles.accentLight }}
+                      _active={{ backgroundColor: styles.accentDark }}
+                      bg={styles.accentLight}
                       onClick={() => {
                         if (page > 1) setPage(page - 1);
                       }}
                     />
                     <Text m="0.5rem">Page {page} </Text>
                     <IconButton
+                      color="#FFFFFF"
                       disabled={page >= maxPageSize}
-                      bg={styles.backgroundColor}
+                      bg={styles.accentLight}
                       icon={<FiArrowRight />}
+                      _focus={{ boxShadow: "none" }}
+                      _hover={{ backgroundColor: styles.accentLight }}
+                      _active={{ backgroundColor: styles.accentDark }}
                       onClick={() => {
                         if (page < maxPageSize) setPage(page + 1);
                       }}
@@ -57,19 +73,39 @@ export default function Courses({ styles }) {
             </Tr>
           </Thead>
           <Tbody>
-            {courses.slice((page - 1) * pageSize, page * pageSize).map((c) => (
-              <Tr borderBottom={`1px solid ${styles.color}`} key={c}>
-                <Td>
-                  <Flex>
-                    <Icon marginRight="1rem" fontSize="2xl" as={FiBook} />
-                    <Course title={c} />
-                  </Flex>
-                </Td>
-              </Tr>
-            ))}
+            {courses
+              .slice((page - 1) * pageSize, page * pageSize)
+              .map((course) => (
+                <Tr
+                  borderBottom={`1px solid ${styles.colorPrimary}`}
+                  key={course.id}
+                >
+                  <Td>
+                    <Flex>
+                      <Icon
+                        color={styles.accentLight}
+                        marginRight="1rem"
+                        fontSize="2xl"
+                        as={FiBook}
+                      />
+                      <Link
+                        onClick={() =>
+                          navigate(`/courses/${course.id}`, {
+                            state: { course: course },
+                          })
+                        }
+                      >
+                        {course.name}
+                      </Link>
+                    </Flex>
+                  </Td>
+                </Tr>
+              ))}
           </Tbody>
         </Table>
       </Flex>
     </Flex>
   );
-}
+};
+
+export default Courses;

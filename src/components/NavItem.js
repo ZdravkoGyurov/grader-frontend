@@ -3,7 +3,7 @@ import { Menu, MenuButton } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/icon";
 import { NavLink } from "react-router-dom";
 
-export default function NavItem({ navSize, title, icon, path, location }) {
+const NavItem = ({ navSize, title, icon, path, location }) => {
   return (
     <Flex
       mt={25}
@@ -35,4 +35,6 @@ export default function NavItem({ navSize, title, icon, path, location }) {
       </Menu>
     </Flex>
   );
-}
+};
+
+export default NavItem;

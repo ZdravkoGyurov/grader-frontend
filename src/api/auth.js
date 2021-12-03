@@ -1,37 +1,36 @@
 import axios from "axios";
 
-function login() {
+const login = () => {
   window.location.href = "http://localhost:8080/login/oauth/github";
-}
+};
 
-function getUserInfo(setUserInfo, setFetchingUserInfo) {
-  axios
-    .get("http://localhost:8080/userInfo", {
+const getUser = async (setUser, setFetchingUser) => {
+  try {
+    const result = await axios.get("http://localhost:8080/userInfo", {
       withCredentials: true,
-    })
-    .then((result) => {
-      console.log(result.data);
-      setUserInfo(result.data);
-      setFetchingUserInfo(false);
-    })
-    .catch((error) => {
-      setUserInfo(null);
-      setFetchingUserInfo(false);
     });
-}
 
-function logout(callback) {
-  axios
-    .delete("http://localhost:8080/logout", {
+    setUser(result.data);
+    setFetchingUser(false);
+  } catch (error) {
+    console.error(error);
+    setUser(null);
+    setFetchingUser(false);
+  }
+};
+
+const logout = async (callback) => {
+  try {
+    await axios.delete("http://localhost:8080/logout", {
       withCredentials: true,
-    })
-    .then(() => {
-      callback();
-    })
-    .catch((error) => {
-      callback(error);
     });
-}
 
-const auth = { login, getUserInfo, logout };
-export default auth;
+    callback();
+  } catch (error) {
+    console.error(error);
+    callback(error);
+  }
+};
+
+const authApi = { login, getUser, logout };
+export default authApi;

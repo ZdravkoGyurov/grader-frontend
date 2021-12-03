@@ -1,18 +1,22 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./Home";
-import About from "./About";
 import { Flex } from "@chakra-ui/layout";
 import NotFound from "./NotFound";
 import Users from "./Users";
 import Courses from "./Courses";
 import Submissions from "./Submissions";
 import Assignments from "./Assignments";
+import { useContext } from "react";
+import ThemeContext from "../contexts/ThemeContext";
+import Course from "./Course";
 
-export default function Main({ userInfo, styles }) {
+const Main = () => {
+  const { styles } = useContext(ThemeContext);
+
   return (
     <Flex
-      backgroundColor={styles.backgroundColor}
-      color={styles.color}
+      backgroundColor={styles.bg}
+      color={styles.colorPrimary}
       w="100%"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       borderRadius="8px"
@@ -22,17 +26,14 @@ export default function Main({ userInfo, styles }) {
       <Routes>
         <Route exact strict path="/submissions" element={<Submissions />} />
         <Route exact strict path="/assignments" element={<Assignments />} />
-        <Route
-          exact
-          strict
-          path="/courses"
-          element={<Courses styles={styles} />}
-        />
+        <Route exact strict path="/courses" element={<Courses />} />
+        <Route exact strict path="/courses/:courseId" element={<Course />} />
         <Route exact strict path="/users" element={<Users />} />
-        <Route exact strict path="/about" element={<About />} />
-        <Route exact strict path="/" element={<Home userInfo={userInfo} />} />
+        <Route exact strict path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Flex>
   );
-}
+};
+
+export default Main;
