@@ -227,14 +227,6 @@ const Assignment = () => {
       <Flex m="0 5%" overflowY="auto" flexDir="column" p="0 2rem">
         <Flex justifyContent="space-between">
           <Flex flexDir="column">
-            <Text fontWeight="bold">ID</Text>
-            <Text>{assignmentState.assignment.id}</Text>
-          </Flex>
-          <Flex flexDir="column">
-            <Text fontWeight="bold">NAME</Text>
-            <Text>{assignmentState.assignment.name}</Text>
-          </Flex>
-          <Flex flexDir="column">
             <Text fontWeight="bold">GITHUB NAME</Text>
             <Text>{assignmentState.assignment.githubName}</Text>
           </Flex>
