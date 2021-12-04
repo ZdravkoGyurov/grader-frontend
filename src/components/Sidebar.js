@@ -2,7 +2,7 @@ import { Avatar } from "@chakra-ui/avatar";
 import { IconButton } from "@chakra-ui/button";
 import { Badge, Divider, Flex, Heading } from "@chakra-ui/layout";
 import { useContext, useState } from "react";
-import { FiMenu, FiUsers, FiBook, FiCheckSquare, FiCode } from "react-icons/fi";
+import { FiMenu, FiUsers, FiBook } from "react-icons/fi";
 import { useLocation } from "react-router";
 import consts from "../consts";
 import ThemeContext from "../contexts/ThemeContext";
@@ -78,20 +78,6 @@ const Sidebar = () => {
               ? location.pathname
               : "/courses"
           }
-          location={location.pathname}
-        ></NavItem>
-        <NavItem
-          navSize={navSize}
-          icon={FiCode}
-          title="Assignments"
-          path="/assignments"
-          location={location.pathname}
-        ></NavItem>
-        <NavItem
-          navSize={navSize}
-          icon={FiCheckSquare}
-          title="Submissions"
-          path="/submissions"
           location={location.pathname}
         ></NavItem>
         <NavItem

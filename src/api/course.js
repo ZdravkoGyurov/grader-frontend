@@ -1,34 +1,19 @@
 import axios from "axios";
 
-const getCourses = async (setCourses, setFetchingCourses) => {
-  setFetchingCourses(true);
-  try {
-    const result = await axios.get("http://localhost:8080/course", {
+const getCourses = async () => {
+  return (
+    await axios.get("http://localhost:8080/course", {
       withCredentials: true,
-    });
-
-    setCourses(result.data);
-    setFetchingCourses(false);
-  } catch (error) {
-    console.error(error);
-    setCourses(null);
-    setFetchingCourses(false);
-  }
+    })
+  ).data;
 };
 
-const getCourse = async (courseId, setCourse, setFetchedCourse) => {
-  try {
-    const result = await axios.get(`http://localhost:8080/course/${courseId}`, {
-      withCredentials: true,
-    });
+const getCourse = async (courseId, callback) => {
+  const result = await axios.get(`http://localhost:8080/course/${courseId}`, {
+    withCredentials: true,
+  });
 
-    setCourse(result.data);
-    setFetchedCourse(true);
-  } catch (error) {
-    console.error(error);
-    setCourse(null);
-    setFetchedCourse(true);
-  }
+  return result.data;
 };
 
 const courseApi = {

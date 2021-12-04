@@ -14,16 +14,14 @@ const Header = () => {
 
   let navigate = useNavigate();
 
-  const handleLogout = () => {
-    authApi.logout((error) => {
-      if (error) {
-        console.error(error);
-        return;
-      }
-
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
       setUser(null);
-      return navigate("/");
-    });
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -37,7 +35,7 @@ const Header = () => {
       alignItems="center"
       p="1rem"
     >
-      <Text fontSize="3xl">Grader</Text>
+      <Text fontSize="3xl">graderhub.io</Text>
       <Flex alignItems="center">
         <Icon
           color={styles.colorSecondary}

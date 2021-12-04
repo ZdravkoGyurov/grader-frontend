@@ -2,7 +2,15 @@ import { IconButton } from "@chakra-ui/button";
 import Icon from "@chakra-ui/icon";
 import { Flex, Link, Text } from "@chakra-ui/layout";
 import { useContext, useEffect, useState } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+} from "@chakra-ui/react";
 import { FiArrowLeft, FiArrowRight, FiBook } from "react-icons/fi";
 import ThemeContext from "../contexts/ThemeContext";
 import courseApi from "../api/course";
@@ -12,7 +20,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 const Courses = () => {
   const { styles } = useContext(ThemeContext);
 
-  const pageSize = 10;
+  const pageSize = 5;
   const [courses, setCourses] = useState([]);
   const [fetchingCourses, setFetchingCourses] = useState(false);
   const [page, setPage] = useState(1);
@@ -20,9 +28,22 @@ const Courses = () => {
 
   let navigate = useNavigate();
 
+  const fetchCourses = async () => {
+    setFetchingCourses(true);
+    try {
+      const courses = await courseApi.getCourses();
+      setCourses(courses);
+      setFetchingCourses(false);
+      setMaxPageSize(Math.ceil(courses.length / pageSize));
+    } catch (error) {
+      console.error(error);
+      setCourses(null);
+      setFetchingCourses(false);
+    }
+  };
+
   useEffect(() => {
-    courseApi.getCourses(setCourses, setFetchingCourses);
-    setMaxPageSize(Math.ceil(courses.length / pageSize));
+    fetchCourses();
   }, []);
 
   return (
@@ -36,6 +57,7 @@ const Courses = () => {
       </Flex>
       <Flex m="0 5%" overflowY="auto" flexDir="column" p="2rem">
         <Table variant="unstyled">
+          <TableCaption placement="top">Courses</TableCaption>
           <Thead borderBottom={`2px solid ${styles.colorPrimary}`}>
             <Tr>
               <Th>

@@ -29,8 +29,21 @@ const App = () => {
 
   const [user, setUser] = useState(null);
   const [fetchingUser, setFetchingUser] = useState(true);
+
+  const fetchUser = async () => {
+    setFetchingUser(true);
+    try {
+      const user = await authApi.getUser();
+      setUser(user);
+    } catch (error) {
+      console.error(error);
+      setUser(null);
+    }
+    setFetchingUser(false);
+  };
+
   useEffect(() => {
-    authApi.getUser(setUser, setFetchingUser);
+    fetchUser();
   }, []);
 
   if (fetchingUser) {

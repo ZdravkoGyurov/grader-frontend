@@ -43,14 +43,25 @@ const Course = () => {
       setCourse(state.course);
       setFetchedCourse(true);
     } else {
-      await courseApi.getCourse(courseId, setCourse, setFetchedCourse);
+      try {
+        const course = await courseApi.getCourse(courseId);
+        setCourse(course);
+      } catch (error) {
+        console.error(error);
+        setCourse(null);
+      }
+      setFetchedCourse(true);
     }
 
-    await assignmentApi.getAssignments(
-      courseId,
-      setAssignments,
-      setFetchedAssignments
-    );
+    try {
+      const assignments = await assignmentApi.getAssignments(courseId);
+      setAssignments(assignments);
+    } catch (error) {
+      console.error(error);
+      setAssignments(null);
+    }
+    setFetchedAssignments(true);
+
     setMaxPageSize(Math.ceil(assignments.length / pageSize));
   };
 
@@ -59,7 +70,7 @@ const Course = () => {
   }, []);
 
   if (!fetchedCourse || !fetchedAssignments) {
-    return <Flex>fething...</Flex>;
+    return <Flex>fetching...</Flex>;
   }
 
   return (
