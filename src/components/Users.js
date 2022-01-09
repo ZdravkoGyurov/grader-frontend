@@ -4,7 +4,7 @@ import {
   BreadcrumbLink,
 } from "@chakra-ui/breadcrumb";
 import { Flex, Text } from "@chakra-ui/layout";
-import { Spinner } from "@chakra-ui/spinner";
+import Loading from "./Loading";
 
 const Users = () => {
   return (
@@ -17,13 +17,7 @@ const Users = () => {
         </Breadcrumb>
       </Flex>
       <Flex m="0 5%" overflowY="auto" flexDir="column" p="2rem">
-        {false ? (
-          <Flex marginTop="10rem" justifyContent="center">
-            <Spinner size="xl" />
-          </Flex>
-        ) : (
-          <Text>Change role...</Text>
-        )}
+        {false ? <Loading /> : <Text>Change role...</Text>}
       </Flex>
     </Flex>
   );

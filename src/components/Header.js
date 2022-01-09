@@ -35,7 +35,7 @@ const Header = () => {
       alignItems="center"
       p="1rem"
     >
-      <Text fontSize="3xl">graderhub.io</Text>
+      <Text fontSize="3xl">Grader.io</Text>
       <Flex alignItems="center">
         <Icon
           color={styles.colorSecondary}
